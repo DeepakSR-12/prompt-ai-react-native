@@ -1,5 +1,6 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   Text,
   TextInput,
@@ -13,10 +14,8 @@ import Navbar from "../components/Navbar";
 
 export default function SignUpScreen({ navigation }) {
   const { isLoaded, signUp } = useSignUp();
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [emailAddress, setEmailAddress] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
 
   const onSignUpPress = async () => {
     if (!isLoaded) {
@@ -25,19 +24,15 @@ export default function SignUpScreen({ navigation }) {
 
     try {
       await signUp.create({
-        firstName,
-        lastName,
         emailAddress,
         password,
       });
 
-      // https://docs.clerk.dev/popular-guides/passwordless-authentication
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
       navigation.navigate("VerifyCode");
     } catch (err) {
-      log("Error:> " + err?.status || "");
-      log("Error:> " + err?.errors ? JSON.stringify(err.errors) : err);
+      Alert.alert(err?.errors[0]?.message);
     }
   };
 
@@ -49,26 +44,6 @@ export default function SignUpScreen({ navigation }) {
       <View style={styles.container}>
         <View style={styles.oauthView}>
           <OAuthButtons />
-        </View>
-
-        <View style={styles.inputView}>
-          <TextInput
-            value={firstName}
-            style={styles.textInput}
-            placeholder="First name..."
-            placeholderTextColor="#000"
-            onChangeText={(firstName) => setFirstName(firstName)}
-          />
-        </View>
-
-        <View style={styles.inputView}>
-          <TextInput
-            value={lastName}
-            style={styles.textInput}
-            placeholder="Last name..."
-            placeholderTextColor="#000"
-            onChangeText={(lastName) => setLastName(lastName)}
-          />
         </View>
 
         <View style={styles.inputView}>

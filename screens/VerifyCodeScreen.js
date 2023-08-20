@@ -1,12 +1,20 @@
-import * as React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+  Alert,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { styles } from "../components/Styles";
+import Navbar from "../components/Navbar";
 
 export default function VerifyCodeScreen({ navigation }) {
   const { isLoaded, signUp, setSession } = useSignUp();
 
-  const [code, setCode] = React.useState("");
+  const [code, setCode] = useState("");
 
   const onPress = async () => {
     if (!isLoaded) {
@@ -20,25 +28,27 @@ export default function VerifyCodeScreen({ navigation }) {
 
       await setSession(completeSignUp.createdSessionId);
     } catch (err) {
-      log("Error:> " + err?.status || "");
-      log("Error:> " + err?.errors ? JSON.stringify(err.errors) : err);
+      Alert.alert(err?.errors[0]?.longMessage);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputView}>
-        <TextInput
-          value={code}
-          style={styles.textInput}
-          placeholder="Code..."
-          placeholderTextColor="#000"
-          onChangeText={(code) => setCode(code)}
-        />
+    <SafeAreaView className="flex-1  bg-[#111827]">
+      <Navbar />
+      <View style={styles.container}>
+        <View style={styles.inputView}>
+          <TextInput
+            value={code}
+            style={styles.textInput}
+            placeholder="Code..."
+            placeholderTextColor="#000"
+            onChangeText={(code) => setCode(code)}
+          />
+        </View>
+        <TouchableOpacity style={styles.primaryButton} onPress={onPress}>
+          <Text style={styles.primaryButtonText}>Verify Email</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.primaryButton} onPress={onPress}>
-        <Text style={styles.primaryButtonText}>Verify Email</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }

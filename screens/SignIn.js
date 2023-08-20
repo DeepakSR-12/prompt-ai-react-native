@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   Text,
   TextInput,
@@ -14,8 +15,8 @@ import Navbar from "../components/Navbar";
 export default function SignInScreen({ navigation }) {
   const { signIn, setSession, isLoaded } = useSignIn();
 
-  const [emailAddress, setEmailAddress] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
 
   const onSignInPress = async () => {
     if (!isLoaded) {
@@ -30,8 +31,7 @@ export default function SignInScreen({ navigation }) {
 
       await setSession(completeSignIn.createdSessionId);
     } catch (err) {
-      log("Error:> " + err?.status || "");
-      log("Error:> " + err?.errors ? JSON.stringify(err.errors) : err);
+      Alert.alert(err?.errors[0]?.message);
     }
   };
 

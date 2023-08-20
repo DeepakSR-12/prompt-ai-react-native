@@ -3,11 +3,9 @@ import TypeWriter from "@sucho/react-native-typewriter";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 
 const BACKGROUND = "#263238";
-const WHITE = "#ffffff";
-const PINK = "#c2185b";
 
 export default function LandingHero() {
   const { isSignedIn } = useAuth();
@@ -61,8 +59,8 @@ export default function LandingHero() {
             </Text>
           </TouchableOpacity>
         </LinearGradient>
-        <Text className="text-lg font-light text-zinc-400">
-          Create content using AI 10x faster.
+        <Text className="text-md font-light text-zinc-400">
+          No credit card required.
         </Text>
       </View>
     </View>

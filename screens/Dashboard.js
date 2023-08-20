@@ -33,7 +33,7 @@ function Dashboard({ navigation }) {
                 </Text>
               </View>
             </View>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight size={25} color="#A1A1AA" />
           </TouchableOpacity>
         ))}
       </View>

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import * as WebBrowser from "expo-web-browser";
-import { Text, TouchableOpacity } from "react-native";
+import { Alert, Text, TouchableOpacity } from "react-native";
 import { useOAuth } from "@clerk/clerk-expo";
 import { styles } from "./Styles";
+import { useNavigation } from "@react-navigation/native";
 // import { useWamUpBrowser } from "../hooks/useWarmUpBrowser";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -12,20 +13,20 @@ export function OAuthButtons() {
   // https://docs.expo.dev/guides/authentication/#improving-user-experience
   //   useWamUpBrowser();
 
+  const navigation = useNavigation();
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
-  const onPress = React.useCallback(async () => {
+  const onPress = useCallback(async () => {
     try {
       const { createdSessionId, signIn, signUp, setActive } =
         await startOAuthFlow();
 
       if (createdSessionId) {
         setActive({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
+        navigation.navigate("Dashboard");
       }
     } catch (err) {
-      console.error("OAuth error", err);
+      Alert.alert(err?.errors[0]?.message);
     }
   }, []);
 
